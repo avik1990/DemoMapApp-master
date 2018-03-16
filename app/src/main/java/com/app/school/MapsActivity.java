@@ -83,6 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker pMarker;
     LocationRequest mLocationRequest;
     private View mCustomMarkerView;
+    boolean markerLoaded = false;
     /*private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;*/
 
@@ -279,17 +280,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (null != mCurrentLocation) {
             lat = mCurrentLocation.getLatitude();
             lng = mCurrentLocation.getLongitude();
-          //  Toast.makeText(mContext, lat + "" + lng, Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(mContext, lat + "" + lng, Toast.LENGTH_SHORT).show();
 
-            mMarker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(lat, lng))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_redcars))
-                    .draggable(true)
-                    .visible(true));
+            if (!markerLoaded) {
+                mMarker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(lat, lng))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_redcars))
+                        .draggable(true)
+                        .visible(true));
+                markerLoaded = true;
+            }
 
             makeAni2(new LatLng(lat, lng));
-        } else {
-           // Toast.makeText(mContext, "Hello Not Connected", Toast.LENGTH_SHORT).show();
+        } else
+
+        {
+            // Toast.makeText(mContext, "Hello Not Connected", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -383,6 +389,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }
+
     }
 
     @Override
@@ -397,7 +404,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLngBounds bounds = builder.build();
                 CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
                 mMap.moveCamera(cu);
-                mMap.setMyLocationEnabled(true);
+                //mMap.setMyLocationEnabled(true);
                 //mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
             }
         });
@@ -510,6 +517,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
     public void animateCameraTo(final double lat, final double lng, LatLng currentPosition) {
         CameraPosition camPosition = mMap.getCameraPosition();
         if (!((Math.floor(camPosition.target.latitude * 100) / 100) == (Math.floor(lat * 100) / 100) && (Math.floor(camPosition.target.longitude * 100) / 100) == (Math.floor(lng * 100) / 100))) {
@@ -587,19 +595,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         return brng;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
